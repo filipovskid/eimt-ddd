@@ -28,7 +28,7 @@ public class StoredDomainEvent {
     @Column(name = "domain_event_class_name", nullable = false)
     private String domainEventClassName;
 
-    @JsonRawValue
+    @JsonRawValue // Not using RawJsonDeserializer, check consequences
     @Column(name = "domain_event_body", nullable = false, length = DOMAIN_EVENT_JSON_MAX_LENGTH)
     private String domainEventBody;
 
