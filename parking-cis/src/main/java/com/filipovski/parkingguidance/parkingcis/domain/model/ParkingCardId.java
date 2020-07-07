@@ -1,0 +1,14 @@
+package com.filipovski.parkingguidance.parkingcis.domain.model;
+
+import com.filipovski.parkingguidance.sharedkernel.domain.base.DomainObjectId;
+
+public class ParkingCardId extends DomainObjectId {
+
+    public ParkingCardId() {
+        super("");
+    }
+
+    public ParkingCardId(String id) {
+        super(id);
+    }
+}
