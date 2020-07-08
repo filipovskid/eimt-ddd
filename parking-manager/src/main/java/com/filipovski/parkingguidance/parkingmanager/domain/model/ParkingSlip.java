@@ -28,10 +28,13 @@ public class ParkingSlip extends AbstractEntity<ParkingSlipId> {
 
     public ParkingSlip() { }
 
-    public ParkingSlip(@NonNull Instant enterTime, @NonNull ParkingSlot parkingSlot) {
+    public ParkingSlip(@NonNull Instant enterTime,
+                       @NonNull ParkingSlot parkingSlot,
+                       @NonNull ParkingCardId parkingCardId) {
         super(DomainObjectId.randomId(ParkingSlipId.class));
         setEnterTime(enterTime);
         this.parkingSlot = parkingSlot;
+        this.parkingCardId = parkingCardId;
     }
 
     private void setEnterTime(Instant time) {

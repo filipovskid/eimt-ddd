@@ -69,5 +69,6 @@ public class ParkingSlot extends AbstractEntity<ParkingSlotId> {
         if(!parkingSlip.isSlipFor(this))
             throw new IllegalArgumentException("Can't add a parking slip that of a diffrent slot");
 
+        this.parkingSlips.add(parkingSlip);
     }
 }

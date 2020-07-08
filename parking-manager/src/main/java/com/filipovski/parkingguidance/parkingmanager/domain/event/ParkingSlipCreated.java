@@ -28,6 +28,6 @@ public class ParkingSlipCreated implements DomainEvent {
     @Override
     @NonNull
     public Instant occuredOn() {
-        return null;
+        return occuredOn;
     }
 }

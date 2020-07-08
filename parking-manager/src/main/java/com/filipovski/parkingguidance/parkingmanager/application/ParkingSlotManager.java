@@ -10,6 +10,7 @@ import lombok.NonNull;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validator;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
+@Transactional
 public class ParkingSlotManager {
     private final ApplicationEventPublisher applicationEventPublisher;
     private final ParkingSlotRepository parkingSlotRepository;
@@ -33,7 +35,7 @@ public class ParkingSlotManager {
 //        this.validator = validator;
     }
 
-    public ParkingSlip reserveParkingSlot(@NonNull ParkingSlotReservationDto slotReservation) throws ChangeSetPersister.NotFoundException {
+    public ParkingSlip reserveParkingSlot(@NonNull ParkingSlotReservationDto slotReservation) {
         Objects.requireNonNull(slotReservation,"Slot reservation must not be null");
 //        var constraintViolations = validator.validate(slotReservation);
 //
@@ -44,6 +46,7 @@ public class ParkingSlotManager {
         ParkingSlot parkingSlot = parkingManager.checkParkingSlot(slotReservation.getParkingSlotId());
         parkingSlot.occupySlot();
         ParkingSlip parkingSlip = parkingManager.generateParkingSlip(parkingSlot, slotReservation.getParkingCardId());
+        parkingSlotRepository.saveAndFlush(parkingSlot);
 
         applicationEventPublisher.publishEvent(new ParkingSlipCreated(parkingSlip.getId(), parkingSlip.getEnterTime()));
 

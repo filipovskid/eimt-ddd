@@ -20,16 +20,16 @@ public class ParkingManager {
         this.parkingSlotRepository = parkingSlotRepository;
     }
 
-    public ParkingSlot checkParkingSlot(@NonNull ParkingSlotId parkingSlotId) throws ChangeSetPersister.NotFoundException {
+    public ParkingSlot checkParkingSlot(@NonNull ParkingSlotId parkingSlotId) {
         Objects.requireNonNull(parkingSlotId, "ParkingSlotId is null");
 
         return parkingSlotRepository.findById(parkingSlotId)
-                .orElseThrow(ChangeSetPersister.NotFoundException::new);
+                .orElseThrow(() -> new RuntimeException("ParkingSlot not found"));
     }
 
     public ParkingSlip generateParkingSlip(@NonNull ParkingSlot parkingSlot,
                                            @NonNull ParkingCardId parkingCardId) {
-        ParkingSlip parkingSlip = new ParkingSlip(Instant.now(), parkingSlot);
+        ParkingSlip parkingSlip = new ParkingSlip(Instant.now(), parkingSlot, parkingCardId);
         parkingSlot.addParkingSlip(parkingSlip);
 
         return parkingSlip;
