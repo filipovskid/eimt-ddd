@@ -1,6 +1,7 @@
 package com.filipovski.parkingguidance.parkingmanager.domain.model;
 
 import com.filipovski.parkingguidance.sharedkernel.domain.base.AbstractEntity;
+import com.filipovski.parkingguidance.sharedkernel.domain.base.DomainObjectId;
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -21,14 +22,16 @@ public class ParkingSlip extends AbstractEntity<ParkingSlipId> {
     @ManyToOne(fetch = FetchType.EAGER)
     private ParkingSlot parkingSlot;
 
-//    @Embedded
-//    @AttributeOverride(name = "id",column = @Column(name = "car_id", nullable = false))
-//    private CarId cadId;
+    @Embedded
+    @AttributeOverride(name = "id",column = @Column(name = "parking_card_id", nullable = false))
+    private ParkingCardId parkingCardId;
 
     public ParkingSlip() { }
 
-    public ParkingSlip(@NonNull Instant enterTime) {
+    public ParkingSlip(@NonNull Instant enterTime, @NonNull ParkingSlot parkingSlot) {
+        super(DomainObjectId.randomId(ParkingSlipId.class));
         setEnterTime(enterTime);
+        this.parkingSlot = parkingSlot;
     }
 
     private void setEnterTime(Instant time) {
@@ -36,4 +39,8 @@ public class ParkingSlip extends AbstractEntity<ParkingSlipId> {
     }
 
 //    private void setExitTime() {}
+
+    public boolean isSlipFor(ParkingSlot parkingSlot) {
+        return true;
+    }
 }

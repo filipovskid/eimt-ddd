@@ -27,7 +27,7 @@ public class SlotsCount implements ValueObject {
         if(numberOfSlots < 1)
             throw new IllegalArgumentException("Parking lot should have at least 1 slot available !");
 
-        if(numberOfSlots > numberOfOccupiedSlots)
+        if(numberOfSlots < numberOfOccupiedSlots)
             throw new RuntimeException("Number of occupied slots should never exceed number of slots!");
 
         return new SlotsCount(numberOfSlots, numberOfOccupiedSlots);

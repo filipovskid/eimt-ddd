@@ -2,10 +2,13 @@ package com.filipovski.parkingguidance.parkingmanager.domain.model;
 
 import com.filipovski.parkingguidance.sharedkernel.domain.base.ValueObject;
 
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class SlotIdentifier implements ValueObject {
     private String identifier;
 
-    private SlotIdentifier() { }
+    public SlotIdentifier() { }
 
     private SlotIdentifier(String identifier) {
         this.identifier = identifier;
@@ -19,5 +22,7 @@ public class SlotIdentifier implements ValueObject {
         return new SlotIdentifier(String.format("F%d/%d", floor, slotNumber));
     }
 
-
+    public String identifier() {
+        return identifier;
+    }
 }
