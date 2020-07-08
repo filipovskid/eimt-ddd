@@ -1,0 +1,17 @@
+---
+version: '3'
+
+services:
+  postgres:
+    image: postgres:12.3
+    hostname: postgres-db
+    container_name: postgres-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: "darko"
+      POSTGRES_PASSWORD: "darko"
+      POSTGRES_DB: "parking"
+    volumes:
+      - /Users/darko/Documents/Projects/databases/parking-guidance:/var/lib/postgresql/data
+
