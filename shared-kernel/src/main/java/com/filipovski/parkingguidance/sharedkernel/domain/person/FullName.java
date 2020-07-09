@@ -1,20 +1,29 @@
-package com.filipovski.parkingguidance.parkingcis.domain.model;
+package com.filipovski.parkingguidance.sharedkernel.domain.person;
 
 import com.filipovski.parkingguidance.sharedkernel.domain.base.ValueObject;
+import lombok.Getter;
 
+import javax.persistence.Embeddable;
 import java.util.Objects;
 
+@Getter
+@Embeddable
 public class FullName implements ValueObject {
     private String firstName;
 
     private String lastName;
+
+    public FullName() {
+        this.firstName = null;
+        this.lastName = null;
+    }
 
     private FullName(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
     }
 
-    public FullName of(String firstName, String lastName) {
+    public static FullName of(String firstName, String lastName) {
         Objects.requireNonNull(firstName, "First name must not be null");
         Objects.requireNonNull(firstName, "Last name must not be null");
 

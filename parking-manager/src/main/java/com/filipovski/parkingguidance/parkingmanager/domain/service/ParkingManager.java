@@ -1,9 +1,6 @@
 package com.filipovski.parkingguidance.parkingmanager.domain.service;
 
-import com.filipovski.parkingguidance.parkingmanager.domain.model.ParkingCardId;
-import com.filipovski.parkingguidance.parkingmanager.domain.model.ParkingSlip;
-import com.filipovski.parkingguidance.parkingmanager.domain.model.ParkingSlot;
-import com.filipovski.parkingguidance.parkingmanager.domain.model.ParkingSlotId;
+import com.filipovski.parkingguidance.parkingmanager.domain.model.*;
 import com.filipovski.parkingguidance.parkingmanager.domain.repository.ParkingSlotRepository;
 import lombok.NonNull;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -33,5 +30,10 @@ public class ParkingManager {
         parkingSlot.addParkingSlip(parkingSlip);
 
         return parkingSlip;
+    }
+
+    public void checkCardCredit(@NonNull ParkingCard parkingCard) {
+        if (!parkingCard.hasCredit())
+            throw new RuntimeException("No credit on your parking card");
     }
 }

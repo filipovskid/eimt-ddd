@@ -1,0 +1,30 @@
+package com.filipovski.parkingguidance.parkingcis.application.dto;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.filipovski.parkingguidance.parkingcis.domain.model.ParkingCard;
+import com.filipovski.parkingguidance.parkingcis.domain.model.ParkingCardId;
+import com.filipovski.parkingguidance.sharedkernel.domain.card.CardCredit;
+import com.filipovski.parkingguidance.sharedkernel.domain.person.FullName;
+import lombok.NonNull;
+
+public class ParkingCardDto {
+    @JsonProperty("id")
+    private String parkingCardId;
+
+    @JsonProperty("full_name")
+    private FullName fullName;
+
+    @JsonProperty("card_credit")
+    private CardCredit cardCredit;
+
+    public ParkingCardDto(@NonNull String id, @NonNull FullName fullName, @NonNull CardCredit cardCredit) {
+        this.parkingCardId = id;
+        this.fullName = fullName;
+        this.cardCredit = cardCredit;
+    }
+
+    public static ParkingCardDto of(@NonNull ParkingCard parkingCard) {
+        return new ParkingCardDto(parkingCard.id().getId(), parkingCard.getFullName(), parkingCard.getCardCredit());
+    }
+}

@@ -2,6 +2,7 @@ package com.filipovski.parkingguidance.parkingmanager.application;
 
 import com.filipovski.parkingguidance.parkingmanager.application.dto.ParkingSlotReservationDto;
 import com.filipovski.parkingguidance.parkingmanager.domain.event.ParkingSlipCreated;
+import com.filipovski.parkingguidance.parkingmanager.domain.model.ParkingCard;
 import com.filipovski.parkingguidance.parkingmanager.domain.model.ParkingSlip;
 import com.filipovski.parkingguidance.parkingmanager.domain.model.ParkingSlot;
 import com.filipovski.parkingguidance.parkingmanager.domain.repository.ParkingSlotRepository;
@@ -9,6 +10,7 @@ import com.filipovski.parkingguidance.parkingmanager.domain.service.ParkingManag
 import lombok.NonNull;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.expression.AccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,15 +25,18 @@ public class ParkingSlotManager {
     private final ApplicationEventPublisher applicationEventPublisher;
     private final ParkingSlotRepository parkingSlotRepository;
     private final ParkingManager parkingManager;
+    private final ParkingCardManager parkingCardManager;
 //    private final Validator validator;
 
     public ParkingSlotManager(ApplicationEventPublisher applicationEventPublisher,
                               ParkingSlotRepository parkingSlotRepository,
-                              ParkingManager parkingManager) {
+                              ParkingManager parkingManager,
+                              ParkingCardManager parkingCardManager) {
 
         this.applicationEventPublisher = applicationEventPublisher;
         this.parkingSlotRepository = parkingSlotRepository;
         this.parkingManager = parkingManager;
+        this.parkingCardManager = parkingCardManager;
 //        this.validator = validator;
     }
 
@@ -43,7 +48,12 @@ public class ParkingSlotManager {
 //            throw new ConstraintViolationException("The slot reservation is not valid", constraintViolations);
 //        }
 
+        ParkingCard parkingCard = parkingCardManager.findById(slotReservation.getParkingCardId())
+                .orElseThrow(() -> new RuntimeException("Parking card not found"));
+
+        // Orchestrate
         ParkingSlot parkingSlot = parkingManager.checkParkingSlot(slotReservation.getParkingSlotId());
+        parkingManager.checkCardCredit(parkingCard);
         parkingSlot.occupySlot();
         ParkingSlip parkingSlip = parkingManager.generateParkingSlip(parkingSlot, slotReservation.getParkingCardId());
         parkingSlotRepository.saveAndFlush(parkingSlot);
@@ -51,6 +61,7 @@ public class ParkingSlotManager {
         applicationEventPublisher.publishEvent(new ParkingSlipCreated(
                 parkingSlip.getId(),
                 parkingSlip.getParkingCardId(),
+                parkingSlot.getParkingLot().getId(),
                 parkingSlip.getEnterTime())
         );
 

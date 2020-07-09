@@ -1,24 +1,28 @@
 package com.filipovski.parkingguidance.sharedkernel.domain.card;
 
 import com.filipovski.parkingguidance.sharedkernel.domain.base.ValueObject;
+import lombok.Getter;
 import lombok.NonNull;
 
 import javax.persistence.Embeddable;
 import java.util.Objects;
 
+// Could be used in different modules, thus stored in shared kernel
+
+@Getter
 @Embeddable
 public class CardCredit implements ValueObject {
     private int credit;
 
-    private CardCredit() {
+    public CardCredit() {
         this.credit = 0;
     }
 
-    private CardCredit(@NonNull int credit) {
+    private CardCredit(int credit) {
         this.credit = credit;
     }
 
-    public static CardCredit of(@NonNull int numberOfEnters) {
+    public static CardCredit of(int numberOfEnters) {
         return new CardCredit(numberOfEnters);
     }
 

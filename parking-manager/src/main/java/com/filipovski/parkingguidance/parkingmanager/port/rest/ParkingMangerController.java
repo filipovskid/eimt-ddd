@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(path = "/api/slots", consumes = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/slots")
 public class ParkingMangerController {
     private final ParkingSlotManager parkingSlotManager;
 
