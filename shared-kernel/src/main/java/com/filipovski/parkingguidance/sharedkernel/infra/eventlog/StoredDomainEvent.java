@@ -1,14 +1,14 @@
 package com.filipovski.parkingguidance.sharedkernel.infra.eventlog;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRawValue;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.filipovski.parkingguidance.sharedkernel.domain.base.DomainEvent;
+import com.filipovski.parkingguidance.sharedkernel.infra.jackson.RawJsonDeserializer;
 import lombok.NonNull;
 
-import javax.naming.LimitExceededException;
-import javax.naming.SizeLimitExceededException;
 import javax.persistence.*;
 import java.time.Instant;
 import java.util.Objects;
@@ -20,16 +20,21 @@ public class StoredDomainEvent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @JsonProperty("id")
     private Long id;
 
     @Column(name = "occurred_on", nullable = false)
+    @JsonProperty("occuredOn")
     private Instant occurredOn;
 
     @Column(name = "domain_event_class_name", nullable = false)
+    @JsonProperty("domainEventClass")
     private String domainEventClassName;
 
     @JsonRawValue // Not using RawJsonDeserializer, check consequences
+    @JsonDeserialize(using = RawJsonDeserializer.class)
     @Column(name = "domain_event_body", nullable = false, length = DOMAIN_EVENT_JSON_MAX_LENGTH)
+    @JsonProperty("domainEventBody")
     private String domainEventBody;
 
     @Transient

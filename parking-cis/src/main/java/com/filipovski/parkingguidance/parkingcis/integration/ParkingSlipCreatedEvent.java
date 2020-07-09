@@ -1,15 +1,15 @@
-package com.filipovski.parkingguidance.parkingmanager.domain.event;
+package com.filipovski.parkingguidance.parkingcis.integration;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.filipovski.parkingguidance.parkingmanager.domain.model.ParkingCardId;
-import com.filipovski.parkingguidance.parkingmanager.domain.model.ParkingLotId;
-import com.filipovski.parkingguidance.parkingmanager.domain.model.ParkingSlipId;
+import com.filipovski.parkingguidance.parkingcis.domain.model.ParkingCardId;
+import com.filipovski.parkingguidance.parkingcis.domain.model.ParkingLotId;
+import com.filipovski.parkingguidance.parkingcis.domain.model.ParkingSlipId;
 import com.filipovski.parkingguidance.sharedkernel.domain.base.DomainEvent;
 import lombok.NonNull;
 
 import java.time.Instant;
 
-public class ParkingSlipCreated implements DomainEvent {
+public class ParkingSlipCreatedEvent implements DomainEvent {
     @JsonProperty("parkingSlipId")
     private final ParkingSlipId parkingSlipId;
 
@@ -22,7 +22,7 @@ public class ParkingSlipCreated implements DomainEvent {
     @JsonProperty("occuredOn")
     private final Instant occuredOn;
 
-    public ParkingSlipCreated(@JsonProperty("parkingSlipId") @NonNull ParkingSlipId parkingSlipId,
+    public ParkingSlipCreatedEvent(@JsonProperty("parkingSlipId") @NonNull ParkingSlipId parkingSlipId,
                               @JsonProperty("parkingCardId") @NonNull ParkingCardId parkingCardId,
                               @JsonProperty("parkingLotId") @NonNull ParkingLotId parkingLotId,
                               @JsonProperty("occuredOn") @NonNull Instant occuredOn) {

@@ -4,6 +4,7 @@ import com.filipovski.parkingguidance.sharedkernel.domain.base.RemoteEventLog;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.lang.NonNull;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -11,6 +12,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class RemoteEventProcessor {
     private final Map<String, RemoteEventLogService> remoteEventLogServices;
     private final Map<String, RemoteEventTranslator> remoteEventTranslators;
@@ -64,7 +66,7 @@ public class RemoteEventProcessor {
         remoteEventTranslators.values().stream()
                 .filter(translator -> translator.supports(event))
                 .findFirst()
-                .map(translator -> translator.translate(event))
+                .flatMap(translator -> translator.translate(event))
                 .ifPresent(applicationEventPublisher::publishEvent);
     }
 
