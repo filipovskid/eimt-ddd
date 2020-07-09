@@ -24,9 +24,9 @@ public class RemoteEventLogServiceClient implements RemoteEventLogService {
     private final String remoteServerUrl;
     private final WebClient webClient;
 
-    public RemoteEventLogServiceClient(@NonNull String source, @NonNull String remoteServerUrl,
+    public RemoteEventLogServiceClient(@NonNull String remoteServerUrl,
                                        int connectTimeout, int readTimeout ) {
-        this.source = source;
+        this.source = remoteServerUrl; // Used for ProcessedRemoteEvent
         this.remoteServerUrl = remoteServerUrl;
         this.webClient = createWebClient(connectTimeout, readTimeout);
     }
