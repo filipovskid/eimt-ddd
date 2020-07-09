@@ -2,16 +2,13 @@ package com.filipovski.parkingguidance.parkingcis.domain.model;
 
 import com.filipovski.parkingguidance.sharedkernel.domain.base.DomainObjectId;
 
-import javax.persistence.Embeddable;
+public class ParkingSlipId extends DomainObjectId {
 
-@Embeddable
-public class ParkingCardId extends DomainObjectId {
-
-    public ParkingCardId() {
+    public ParkingSlipId() {
         super("");
     }
 
-    public ParkingCardId(String id) {
+    public ParkingSlipId(String id) {
         super(id);
     }
 }

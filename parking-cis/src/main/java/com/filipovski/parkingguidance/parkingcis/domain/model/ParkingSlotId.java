@@ -1,17 +1,15 @@
 package com.filipovski.parkingguidance.parkingcis.domain.model;
 
 import com.filipovski.parkingguidance.sharedkernel.domain.base.DomainObjectId;
+import org.springframework.lang.NonNull;
 
-import javax.persistence.Embeddable;
+public class ParkingSlotId extends DomainObjectId {
 
-@Embeddable
-public class ParkingCardId extends DomainObjectId {
-
-    public ParkingCardId() {
+    public ParkingSlotId() {
         super("");
     }
 
-    public ParkingCardId(String id) {
+    public ParkingSlotId(@NonNull String id) {
         super(id);
     }
 }
