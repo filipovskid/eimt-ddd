@@ -57,6 +57,9 @@ public class ParkingSlotManager {
                 parkingSlip.getEnterTime())
         );
 
+        parkingSlot.getDomainEvents().forEach(applicationEventPublisher::publishEvent);
+        parkingSlot.clearDomainEvents();
+
         return parkingSlip;
     }
 
@@ -69,6 +72,9 @@ public class ParkingSlotManager {
         parkingManager.setParkingSlipExitTime(parkingSlot, parkingSlipId);
 
         parkingSlotRepository.saveAndFlush(parkingSlot);
+
+        parkingSlot.getDomainEvents().forEach(applicationEventPublisher::publishEvent);
+        parkingSlot.clearDomainEvents();
     }
 
     @NonNull

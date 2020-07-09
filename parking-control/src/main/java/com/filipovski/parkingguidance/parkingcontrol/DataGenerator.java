@@ -1,5 +1,6 @@
 package com.filipovski.parkingguidance.parkingcontrol;
 
+import com.filipovski.parkingguidance.parkingcontrol.domain.model.ParkingLotId;
 import com.filipovski.parkingguidance.parkingcontrol.domain.model.Ramp;
 import com.filipovski.parkingguidance.parkingcontrol.domain.model.RampStatus;
 import com.filipovski.parkingguidance.parkingcontrol.domain.repository.RampRepository;
@@ -26,9 +27,9 @@ public class DataGenerator {
         if(rampRepository.findAll().size() == 0) {
             List<Ramp> ramps = new ArrayList<Ramp>();
 
-            ramps.add(new Ramp(RampStatus.OPENED));
-            ramps.add(new Ramp(RampStatus.OPENED));
-            ramps.add(new Ramp(RampStatus.OPENED));
+            ramps.add(new Ramp(new ParkingLotId("a1"), RampStatus.OPENED));
+            ramps.add(new Ramp(new ParkingLotId("a1"), RampStatus.OPENED));
+            ramps.add(new Ramp(new ParkingLotId("a1"), RampStatus.OPENED));
 
             rampRepository.saveAll(ramps);
         }

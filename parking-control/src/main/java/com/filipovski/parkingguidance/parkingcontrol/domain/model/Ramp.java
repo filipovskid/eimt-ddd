@@ -2,13 +2,13 @@ package com.filipovski.parkingguidance.parkingcontrol.domain.model;
 
 import com.filipovski.parkingguidance.sharedkernel.domain.base.AbstractEntity;
 import com.filipovski.parkingguidance.sharedkernel.domain.base.DomainObjectId;
+import lombok.Getter;
 import lombok.NonNull;
 
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Version;
+import javax.persistence.*;
 
+@Getter
+@Entity
 public class Ramp extends AbstractEntity<RampId> {
     @Version
     private Long version;
@@ -17,10 +17,15 @@ public class Ramp extends AbstractEntity<RampId> {
     @Enumerated(EnumType.STRING)
     private RampStatus rampStatus;
 
+    @Embedded
+    @AttributeOverride(name = "id",column = @Column(name = "parking_lot_id", nullable = false))
+    private ParkingLotId parkingLotId;
+
     public Ramp() { }
 
-    public Ramp(@NonNull RampStatus rampStatus) {
+    public Ramp(@NonNull ParkingLotId parkingLotId, @NonNull RampStatus rampStatus) {
         super(DomainObjectId.randomId(RampId.class));
+        this.parkingLotId = parkingLotId;
         this.rampStatus = rampStatus;
     }
 
@@ -30,5 +35,9 @@ public class Ramp extends AbstractEntity<RampId> {
 
     public void close() {
         this.rampStatus = RampStatus.CLOSED;
+    }
+
+    public ParkingLotId parkingLotId() {
+        return parkingLotId;
     }
 }

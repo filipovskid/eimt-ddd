@@ -34,21 +34,21 @@ public class SlotsCount implements ValueObject {
     }
 
     public SlotsCount slotOccupied() {
-        if(numberOfOccupiedSlots == numberOfSlots)
+        if(numberOfOccupiedSlots >= numberOfSlots)
             throw new RuntimeException("No slots are available");
 
-        return SlotsCount.of(numberOfSlots, numberOfOccupiedSlots - 1);
+        return SlotsCount.of(numberOfSlots, numberOfOccupiedSlots + 1);
     }
 
     public SlotsCount slotFreed() {
-        if(numberOfOccupiedSlots == 0)
+        if(numberOfOccupiedSlots <= 0)
             throw new RuntimeException("No slots were occupied");
 
         return SlotsCount.of(numberOfSlots, numberOfOccupiedSlots - 1);
     }
 
     @Transient
-    public int getNumberOfSlotsAvailable() {
+    public int numberOfSlotsAvailable() {
         return this.numberOfSlots - this.numberOfOccupiedSlots;
     }
 }
