@@ -63,6 +63,7 @@ public class ParkingSlot extends AbstractEntity<ParkingSlotId> {
 
     public void freeSlot() {
         this.slotStatus = SlotStatus.FREE;
+
     }
 
     public void addParkingSlip(@NonNull ParkingSlip parkingSlip) {

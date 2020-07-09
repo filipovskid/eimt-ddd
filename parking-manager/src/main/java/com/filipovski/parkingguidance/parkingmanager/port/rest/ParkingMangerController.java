@@ -4,7 +4,7 @@ import com.filipovski.parkingguidance.parkingmanager.application.ParkingSlotMana
 import com.filipovski.parkingguidance.parkingmanager.application.dto.ParkingSlotDto;
 import com.filipovski.parkingguidance.parkingmanager.application.dto.ParkingSlotReservationDto;
 import com.filipovski.parkingguidance.parkingmanager.domain.model.ParkingSlip;
-import org.springframework.http.MediaType;
+import com.filipovski.parkingguidance.parkingmanager.domain.model.ParkingSlipId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,9 +31,14 @@ public class ParkingMangerController {
     }
 
     @PostMapping("/reserve")
-    public ResponseEntity reserveParkingSlot(@RequestBody ParkingSlotReservationDto parkingSlotReservation) {
+    public ResponseEntity<String> reserveParkingSlot(@RequestBody ParkingSlotReservationDto parkingSlotReservation) {
         ParkingSlip parkingSlip = parkingSlotManager.reserveParkingSlot(parkingSlotReservation);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(parkingSlip.getId().getId());
+    }
+
+    @GetMapping("/free/{id}")
+    public void freeParkingSlot(@PathVariable("id") ParkingSlipId parkingSlipId) {
+        parkingSlotManager.freeParkingSlot(parkingSlipId);
     }
 }

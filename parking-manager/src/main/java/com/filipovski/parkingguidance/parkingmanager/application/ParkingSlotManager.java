@@ -4,18 +4,16 @@ import com.filipovski.parkingguidance.parkingmanager.application.dto.ParkingSlot
 import com.filipovski.parkingguidance.parkingmanager.domain.event.ParkingSlipCreated;
 import com.filipovski.parkingguidance.parkingmanager.domain.model.ParkingCard;
 import com.filipovski.parkingguidance.parkingmanager.domain.model.ParkingSlip;
+import com.filipovski.parkingguidance.parkingmanager.domain.model.ParkingSlipId;
 import com.filipovski.parkingguidance.parkingmanager.domain.model.ParkingSlot;
 import com.filipovski.parkingguidance.parkingmanager.domain.repository.ParkingSlotRepository;
 import com.filipovski.parkingguidance.parkingmanager.domain.service.ParkingManager;
 import lombok.NonNull;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.data.crossstore.ChangeSetPersister;
-import org.springframework.expression.AccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.ConstraintViolationException;
-import javax.validation.Validator;
+import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 
@@ -37,16 +35,10 @@ public class ParkingSlotManager {
         this.parkingSlotRepository = parkingSlotRepository;
         this.parkingManager = parkingManager;
         this.parkingCardManager = parkingCardManager;
-//        this.validator = validator;
     }
 
     public ParkingSlip reserveParkingSlot(@NonNull ParkingSlotReservationDto slotReservation) {
         Objects.requireNonNull(slotReservation,"Slot reservation must not be null");
-//        var constraintViolations = validator.validate(slotReservation);
-//
-//        if (constraintViolations.size() > 0) {
-//            throw new ConstraintViolationException("The slot reservation is not valid", constraintViolations);
-//        }
 
         ParkingCard parkingCard = parkingCardManager.findById(slotReservation.getParkingCardId())
                 .orElseThrow(() -> new RuntimeException("Parking card not found"));
@@ -66,6 +58,17 @@ public class ParkingSlotManager {
         );
 
         return parkingSlip;
+    }
+
+    public void freeParkingSlot(@NonNull ParkingSlipId parkingSlipId) {
+        Objects.requireNonNull(parkingSlipId, "ParkingSlipId must not be null");
+
+        ParkingSlot parkingSlot = parkingSlotRepository.findSlotByParkingSlipId(parkingSlipId)
+                .orElseThrow(() -> new RuntimeException("ParkingSlot not found"));
+        parkingSlot.freeSlot();
+        parkingManager.setParkingSlipExitTime(parkingSlot, parkingSlipId);
+
+        parkingSlotRepository.saveAndFlush(parkingSlot);
     }
 
     @NonNull

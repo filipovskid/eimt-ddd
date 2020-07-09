@@ -36,4 +36,11 @@ public class ParkingManager {
         if (!parkingCard.hasCredit())
             throw new RuntimeException("No credit on your parking card");
     }
+
+    public void setParkingSlipExitTime(@NonNull ParkingSlot parkingSlot, ParkingSlipId parkingSlipId) {
+        parkingSlot.getParkingSlips().stream()
+                .filter(slip -> slip.id().getId().equals(parkingSlipId.getId()))
+                .findFirst()
+                .ifPresent(ParkingSlip::setExitTime);
+    }
 }
