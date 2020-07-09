@@ -48,7 +48,11 @@ public class ParkingSlotManager {
         ParkingSlip parkingSlip = parkingManager.generateParkingSlip(parkingSlot, slotReservation.getParkingCardId());
         parkingSlotRepository.saveAndFlush(parkingSlot);
 
-        applicationEventPublisher.publishEvent(new ParkingSlipCreated(parkingSlip.getId(), parkingSlip.getEnterTime()));
+        applicationEventPublisher.publishEvent(new ParkingSlipCreated(
+                parkingSlip.getId(),
+                parkingSlip.getParkingCardId(),
+                parkingSlip.getEnterTime())
+        );
 
         return parkingSlip;
     }
