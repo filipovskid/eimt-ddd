@@ -41,7 +41,9 @@ public class ParkingSlip extends AbstractEntity<ParkingSlipId> {
         this.enterTime = time;
     }
 
-//    private void setExitTime() {}
+    public void setExitTime() {
+        this.exitTime = Instant.now();
+    }
 
     public boolean isSlipFor(ParkingSlot parkingSlot) {
         return true;
