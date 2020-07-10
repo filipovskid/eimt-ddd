@@ -9,9 +9,9 @@ services:
     ports:
       - "5432:5432"
     environment:
+      POSTGRES_MULTIPLE_DATABASES: manager,cis,control
       POSTGRES_USER: "darko"
       POSTGRES_PASSWORD: "darko"
-      POSTGRES_DB: "parking"
     volumes:
-      - /Users/darko/Documents/Projects/databases/parking-guidance:/var/lib/postgresql/data
-
+        # - /Users/darko/Documents/Projects/databases/parking-guidance:/var/lib/postgresql/data
+      - ./db:/docker-entrypoint-initdb.d
