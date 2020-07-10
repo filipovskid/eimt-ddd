@@ -1,6 +1,9 @@
 # eimt-ddd
 EiMT lab project
 
+### docker-compose
+docker-compose.yml can be used for starting postgresdb service with three databases for the modules.
+
 ### Endpoints
 
 `GET /api/slots`
