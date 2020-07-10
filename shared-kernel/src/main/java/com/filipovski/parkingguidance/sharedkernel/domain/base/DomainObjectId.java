@@ -26,4 +26,17 @@ public class DomainObjectId implements ValueObject {
             throw new RuntimeException("Could not create a new instance of " + idClass, e);
         }
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DomainObjectId)) return false;
+        DomainObjectId that = (DomainObjectId) o;
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

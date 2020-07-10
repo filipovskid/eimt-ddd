@@ -6,6 +6,7 @@ import lombok.Getter;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Transient;
+import java.util.Objects;
 
 @Embeddable
 public class SlotsCount implements ValueObject {
@@ -50,5 +51,24 @@ public class SlotsCount implements ValueObject {
     @Transient
     public int numberOfSlotsAvailable() {
         return this.numberOfSlots - this.numberOfOccupiedSlots;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SlotsCount that = (SlotsCount) o;
+        return numberOfSlots == that.numberOfSlots &&
+                numberOfOccupiedSlots == that.numberOfOccupiedSlots;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(numberOfSlots, numberOfOccupiedSlots);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%d %d", numberOfSlots, numberOfOccupiedSlots);
     }
 }
