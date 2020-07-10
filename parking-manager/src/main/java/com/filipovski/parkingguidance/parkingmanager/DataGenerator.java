@@ -24,14 +24,14 @@ public class DataGenerator {
     @Transactional
     public void generateData() {
         if(parkingSlotRepository.findAll().size() == 0) {
-            ParkingLot parkingLot = new ParkingLot(SlotsCount.of(5, 0));
+            ParkingLot parkingLot = new ParkingLot(SlotsCount.of(2, 0));
             List<ParkingSlot> parkingSlots = new ArrayList<ParkingSlot>();
 
             parkingSlots.add(new ParkingSlot(parkingLot, SlotIdentifier.of(1, 1)));
             parkingSlots.add(new ParkingSlot(parkingLot, SlotIdentifier.of(1, 2)));
-            parkingSlots.add(new ParkingSlot(parkingLot, SlotIdentifier.of(1, 3)));
-            parkingSlots.add(new ParkingSlot(parkingLot, SlotIdentifier.of(2, 1)));
-            parkingSlots.add(new ParkingSlot(parkingLot, SlotIdentifier.of(2, 2)));
+//            parkingSlots.add(new ParkingSlot(parkingLot, SlotIdentifier.of(1, 3)));
+//            parkingSlots.add(new ParkingSlot(parkingLot, SlotIdentifier.of(2, 1)));
+//            parkingSlots.add(new ParkingSlot(parkingLot, SlotIdentifier.of(2, 2)));
 
             parkingSlotRepository.saveAll(parkingSlots);
         }

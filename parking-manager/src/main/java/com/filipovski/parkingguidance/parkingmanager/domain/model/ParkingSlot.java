@@ -1,11 +1,17 @@
 package com.filipovski.parkingguidance.parkingmanager.domain.model;
 
+import com.filipovski.parkingguidance.parkingmanager.domain.event.ParkingLotAvailable;
+import com.filipovski.parkingguidance.parkingmanager.domain.event.ParkingLotFull;
 import com.filipovski.parkingguidance.sharedkernel.domain.base.AbstractEntity;
+import com.filipovski.parkingguidance.sharedkernel.domain.base.DomainEvent;
 import com.filipovski.parkingguidance.sharedkernel.domain.base.DomainObjectId;
 import lombok.Getter;
 import lombok.NonNull;
 
 import javax.persistence.*;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -33,6 +39,9 @@ public class ParkingSlot extends AbstractEntity<ParkingSlotId> {
             orphanRemoval = true)
     private Set<ParkingSlip> parkingSlips;
 
+    @Transient
+    private List<DomainEvent> domainEvents = new ArrayList<>();
+
     public ParkingSlot() {}
 
     public ParkingSlot(@NonNull  ParkingLot parkingLot, @NonNull SlotIdentifier identifier) {
@@ -58,12 +67,24 @@ public class ParkingSlot extends AbstractEntity<ParkingSlotId> {
         if(slotStatus == slotStatus.OCCUPIED)
             throw new RuntimeException("Slot is already occupied");
 
-        this.slotStatus = slotStatus.OCCUPIED;
+        slotStatus = slotStatus.OCCUPIED;
+        ParkingLotStatus previousLotStatus = parkingLot.getParkingLotStatus();
+        parkingLot.slotOccupied();
+        ParkingLotStatus currentLotStatus = parkingLot.getParkingLotStatus();
+
+        if(currentLotStatus != previousLotStatus)
+            addDomainEvent(new ParkingLotFull(parkingLot.getId(), Instant.now()));
     }
 
     public void freeSlot() {
         this.slotStatus = SlotStatus.FREE;
 
+        ParkingLotStatus previousLotStatus = parkingLot.getParkingLotStatus();
+        parkingLot.slotFreed();
+        ParkingLotStatus currentLotStatus = parkingLot.getParkingLotStatus();
+
+        if(currentLotStatus != previousLotStatus)
+            addDomainEvent(new ParkingLotAvailable(parkingLot.getId(), Instant.now()));
     }
 
     public void addParkingSlip(@NonNull ParkingSlip parkingSlip) {
@@ -71,5 +92,17 @@ public class ParkingSlot extends AbstractEntity<ParkingSlotId> {
             throw new IllegalArgumentException("Can't add a parking slip that of a diffrent slot");
 
         this.parkingSlips.add(parkingSlip);
+    }
+
+    public List<DomainEvent> getDomainEvents() {
+        return domainEvents;
+    }
+
+    public void addDomainEvent(@NonNull DomainEvent event) {
+        domainEvents.add(event);
+    }
+
+    public void clearDomainEvents() {
+        domainEvents.clear();
     }
 }

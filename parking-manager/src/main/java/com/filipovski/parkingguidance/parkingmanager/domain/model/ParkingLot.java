@@ -29,8 +29,22 @@ public class ParkingLot extends AbstractEntity<ParkingLotId> {
         setSlotsCount(slotsCount);
     }
 
-    public void setSlotsCount(@NonNull SlotsCount slotsCount) {
+    private void setSlotsCount(@NonNull SlotsCount slotsCount) {
         this.slotsCount = slotsCount;
+    }
+
+    public void slotOccupied() {
+        slotsCount = slotsCount.slotOccupied();
+
+        if(slotsCount.numberOfSlotsAvailable() <= 0)
+            closeParkingLot();
+    }
+
+    public void slotFreed() {
+        slotsCount = slotsCount.slotFreed();
+
+        if(isParkingLotClosed() && slotsCount.numberOfSlotsAvailable() > 0)
+            openParkingLot();
     }
 
     public void openParkingLot() {
@@ -39,5 +53,9 @@ public class ParkingLot extends AbstractEntity<ParkingLotId> {
 
     public void closeParkingLot() {
         this.parkingLotStatus = ParkingLotStatus.CLOSED;
+    }
+
+    public boolean isParkingLotClosed() {
+        return this.parkingLotStatus == ParkingLotStatus.CLOSED;
     }
 }
